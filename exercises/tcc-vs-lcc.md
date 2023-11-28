@@ -3,25 +3,32 @@
 Explain under which circumstances *Tight Class Cohesion* (TCC) and *Loose Class Cohesion* (LCC) metrics produce the same value for a given Java class. Build an example of such as class and include the code below or find one example in an open-source project from Github and include the link to the class below. Could LCC be lower than TCC for any given class? Explain.
 
 ## Answer
+Pour calculer les scores LCC et TCC, on représente les méthodes par des noeuds qu'on relie entre eux par leurs variables communes. 
+Le score LCC compte le nombre de paires de noeud reliés directement ou indirectement sur le nombre de paires de noeuds total tandis que le score TCC compte seulement le nombre de paires de noeud reliés directement sur le nombre de paires de noeuds total. Le nombre de paires reliés directement ou indirectement  ne peut être inférieur au nombre de paires reliés directement, ainsi le score LCC est toujours supérieur ou égal au score TCC. 
+
+Dans l'exemple ci-dessous, nous avons deux méthodes dans la classe Person : isOlder(Person p) et toString(). Les deux méthodes ne partagent aucune instance de variable et ne sont donc pas réliées. Il n'y aucun lien indirect non plus donc les scores TCC et LCC sont égaux et valent 0.
+
 ```java
-public class Example {
+class Person {
 
-    // Attribut lié à la tâche spécifique
-    private int tcc;
+    private String lastname;
+    private String firtname;
+    private int age; 
 
-    // Attribut avec des responsabilités différentes
-    private List<String> lcc;
-
-    // Méthodes liées à la tâche spécifique
-    public void tacheTCC() {
-        // Logique de la tâche spécifique
-        tcc = 0;
+    public Person(String lastname, String firstname, age) {
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.age = age;
     }
 
-    // Méthodes avec des responsabilités différentes
-    public void tacheLCC(String data) {
-        lcc.add(data);
+    public boolean isOlder(Person p) {
+        return p.age < this.age ;
     }
+
+    public String toString() {
+        return this.lastname + this.firstname;
+    }
+
 }
 ```
 
