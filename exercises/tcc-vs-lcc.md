@@ -6,23 +6,21 @@ Explain under which circumstances *Tight Class Cohesion* (TCC) and *Loose Class 
 ```java
 public class Example {
 
-    // Attributs liés à la tâche spécifique
-    private int taskSpecificData;
-    private String taskSpecificResult;
+    // Attribut lié à la tâche spécifique
+    private int tcc;
 
     // Attribut avec des responsabilités différentes
-    private List<String> additionalData;
+    private List<String> lcc;
 
     // Méthodes liées à la tâche spécifique
-    public void performTask() {
+    public void tacheTCC() {
         // Logique de la tâche spécifique
-        // Utilisation de taskSpecificData et additionalData
-        taskSpecificResult = "Task completed successfully.";
+        tcc = 0;
     }
 
     // Méthodes avec des responsabilités différentes
-    public void addAdditionalData(String data) {
-        additionalData.add(data);
+    public void tacheLCC(String data) {
+        lcc.add(data);
     }
 }
 ```
