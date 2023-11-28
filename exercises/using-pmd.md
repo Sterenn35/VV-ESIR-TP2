@@ -4,3 +4,20 @@ Pick a Java project from Github (see the [instructions](../sujet.md) for suggest
 
 ## Answer
 
+Dans le retour de l'analyse, nous avons vu la ligne suivante : 
+->  functors\NullIsFalsePredicate.java:68:    SimplifyBooleanReturns:    This if statement can be replaced by return !{condition} || {elseBranch};
+Le problème pointait sur cette méthode : 
+```java
+public boolean evaluate(final T object) {
+        if (object == null) {
+            return false;
+        }
+        return iPredicate.evaluate(object);
+    }
+```
+Nous pouvons effectivement modifier le code comme suit : 
+```java
+public boolean evaluate(final T object) {
+        return !(object == null) || iPredicate.evaluate(object);
+    }
+```
