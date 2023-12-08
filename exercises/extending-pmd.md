@@ -49,7 +49,7 @@ Voici la règle XML :
 La règle Xpath est la suivante : ```//IfStatement[descendant::IfStatement[descendant::IfStatement]]```
 Elle permet de vérifier à partir de n'importe quel If, s'il n'y a pas deux If imbriqués parmi ces descendants. 
 
-On applique cette règle lors de l'analyse statique pmd sur le projet apache collections par cette commande :
+On applique cette règle lors de l'analyse statique pmd sur le projet apache collections par cette commande (on a crée notre ruleset.xml contenant notre règle auparavant):
 
 ```bash
 pmd.bat check -d path/du/projet -R path/du/ruleset.xml > rapport2.txt
