@@ -1,9 +1,13 @@
 package fr.istic.vv;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,15 +16,25 @@ import java.util.Set;
 // prints all public enum, classes or interfaces along with their public methods
 public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
 
+    private File file;
     private Set<String> getters;
     private Set<String> attributes;
 
-    public PublicElementsPrinter() {
+    private Set<String> attributesWithoutGetters;
+    private String packageName;
+    private String className;
+
+    public PublicElementsPrinter(File f) {
+        file = f;
         getters = new HashSet<>();
         attributes = new HashSet<>();
+        attributesWithoutGetters = new HashSet<>();
+        packageName = "";
+        className = "";
     }
     @Override
     public void visit(CompilationUnit unit, Void arg) {
+        packageName = unit.getPackageDeclaration().toString();
         for(TypeDeclaration<?> type : unit.getTypes()) {
             type.accept(this, null);
         }
@@ -28,6 +42,15 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
 
     public void visitTypeDeclaration(TypeDeclaration<?> declaration, Void arg) {
         if(!declaration.isPublic()) return;
+        className = declaration.getFullyQualifiedName().orElse("[Anonymous]");
+        for (BodyDeclaration<?> classes: declaration.getMembers()) {            if (classes instanceof ClassOrInterfaceDeclaration) {
+                PublicElementsPrinter p = new PublicElementsPrinter(file);
+                p.packageName = packageName;
+                classes.accept(p, null);
+                p.writeResult();
+            }
+        }
+
         for(MethodDeclaration method : declaration.getMethods()) {
             method.accept(this, arg);
         }
@@ -40,9 +63,10 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
         for(String attribute : attributes) {
             String method = "get"+attribute+"()";
             if (!getters.contains(method)) {
-                System.out.println("Voici les attributs privés qui n'ont pas de getter :" +attribute);
+               attributesWithoutGetters.add(attribute);
             }
         }
+        this.writeResult();
     }
 
     @Override
@@ -69,5 +93,28 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
             attributes.add(mots[2]);
         }
     }
+    public void visit(PackageDeclaration declaration, Void arg) {
+        String mot = declaration.getNameAsString();
+        System.out.println(mot);
+    }
 
+    /**
+     * Récupère les résultats du parser (les attributs) et
+     */
+    public void writeResult() {
+        System.out.println("Writing...");
+        try {
+            FileWriter report = new FileWriter(file);
+            report.write("Package : " + packageName +"\n");
+            report.write("Classe : " + className);
+            report.write("Attributs : ");
+            for (String a: attributesWithoutGetters) {
+
+                report.write(a + ",");
+            }
+            report.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
