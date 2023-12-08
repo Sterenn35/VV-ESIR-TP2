@@ -48,3 +48,16 @@ Voici la règle XML :
 La règle Xpath est la suivante : ```//IfStatement[descendant::IfStatement[descendant::IfStatement]]```
 Elle permet de vérifier à partir de n'importe quel If, s'il n'y a pas deux If parmi ces descendants. 
 
+On applique cette règle lors de l'analyse statique pmd sur le projet apache collections, on obtient ce résultat :
+ ->  CollectionUtils.java:1503:	3IF:	MoreThanTwoNestedIf
+ ->  CollectionUtils.java:1505:	3IF:	MoreThanTwoNestedIf
+ ->  CollectionUtils.java:1507:	3IF:	MoreThanTwoNestedIf
+ ->  CollectionUtils.java:1509:	3IF:	MoreThanTwoNestedIf
+ ->  MapUtils.java:226:	3IF:	MoreThanTwoNestedIf
+ ->  MapUtils.java:926:	3IF:	MoreThanTwoNestedIf
+[...]
+ ->  trie\AbstractPatriciaTrie.java:163:	3IF:	MoreThanTwoNestedIf
+ ->  trie\AbstractPatriciaTrie.java:887:	3IF:	MoreThanTwoNestedIf
+ ->  trie\AbstractPatriciaTrie.java:1217:	3IF:	MoreThanTwoNestedIf
+
+On remarque qu'a de nombreux endroits on retrouve 3 if imbriqués.
