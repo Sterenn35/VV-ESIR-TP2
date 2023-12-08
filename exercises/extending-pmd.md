@@ -22,6 +22,7 @@ You can find more information on extending PMD in the following link: https://pm
 Use your rule with different projects and describe you findings below. See the [instructions](../sujet.md) for suggestions on the projects to use.
 
 ## Answer
+On télécharge pmd designer et on teste notre règle sur du code source Java
 Voici la règle XML : 
 ```xml
 <rule name="ThreeNestedIf"
@@ -46,9 +47,14 @@ Voici la règle XML :
 
 ```
 La règle Xpath est la suivante : ```//IfStatement[descendant::IfStatement[descendant::IfStatement]]```
-Elle permet de vérifier à partir de n'importe quel If, s'il n'y a pas deux If parmi ces descendants. 
+Elle permet de vérifier à partir de n'importe quel If, s'il n'y a pas deux If imbriqués parmi ces descendants. 
 
-On applique cette règle lors de l'analyse statique pmd sur le projet apache collections, on obtient notamment cette ligne parmis d'autres : 
+On applique cette règle lors de l'analyse statique pmd sur le projet apache collections par cette commande :
+
+```bash
+pmd.bat check -d path/du/projet -R path/du/ruleset.xml > rapport2.txt
+```
+On redirige la sortie standard vers un fichier txt, on le lit et on obtient notamment cette ligne : 
 
  ->  MapUtils.java:226:	3IF:	MoreThanTwoNestedIf
 
