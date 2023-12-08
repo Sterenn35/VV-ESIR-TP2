@@ -49,6 +49,7 @@ La règle Xpath est la suivante : ```//IfStatement[descendant::IfStatement[desce
 Elle permet de vérifier à partir de n'importe quel If, s'il n'y a pas deux If parmi ces descendants. 
 
 On applique cette règle lors de l'analyse statique pmd sur le projet apache collections, on obtient notamment cette ligne parmis d'autres : 
+
  ->  MapUtils.java:226:	3IF:	MoreThanTwoNestedIf
 
 Cela correspond à cet endroit dans le code :
