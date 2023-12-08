@@ -22,7 +22,7 @@ You can find more information on extending PMD in the following link: https://pm
 Use your rule with different projects and describe you findings below. See the [instructions](../sujet.md) for suggestions on the projects to use.
 
 ## Answer
-On télécharge pmd designer et on teste notre règle sur du code source Java
+On télécharge pmd designer et on teste notre règle sur du code source Java.
 Voici la règle XML : 
 ```xml
 <rule name="ThreeNestedIf"
