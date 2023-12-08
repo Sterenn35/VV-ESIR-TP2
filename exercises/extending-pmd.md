@@ -48,16 +48,28 @@ Voici la règle XML :
 La règle Xpath est la suivante : ```//IfStatement[descendant::IfStatement[descendant::IfStatement]]```
 Elle permet de vérifier à partir de n'importe quel If, s'il n'y a pas deux If parmi ces descendants. 
 
-On applique cette règle lors de l'analyse statique pmd sur le projet apache collections, on obtient ce résultat :
- ->  CollectionUtils.java:1503:	3IF:	MoreThanTwoNestedIf
- ->  CollectionUtils.java:1505:	3IF:	MoreThanTwoNestedIf
- ->  CollectionUtils.java:1507:	3IF:	MoreThanTwoNestedIf
- ->  CollectionUtils.java:1509:	3IF:	MoreThanTwoNestedIf
+On applique cette règle lors de l'analyse statique pmd sur le projet apache collections, on obtient notamment cette ligne parmis d'autres : 
  ->  MapUtils.java:226:	3IF:	MoreThanTwoNestedIf
- ->  MapUtils.java:926:	3IF:	MoreThanTwoNestedIf
-[...]
- ->  trie\AbstractPatriciaTrie.java:163:	3IF:	MoreThanTwoNestedIf
- ->  trie\AbstractPatriciaTrie.java:887:	3IF:	MoreThanTwoNestedIf
- ->  trie\AbstractPatriciaTrie.java:1217:	3IF:	MoreThanTwoNestedIf
 
-On remarque qu'a de nombreux endroits on retrouve 3 if imbriqués.
+Cela correspond à cet endroit dans le code :
+```java
+ public static <K> Boolean getBoolean(final Map<? super K, ?> map, final K key) {
+        if (map != null) {
+            final Object answer = map.get(key);
+            if (answer != null) {
+                if (answer instanceof Boolean) {
+                    return (Boolean) answer;
+                }
+                if (answer instanceof String) {
+                    return Boolean.valueOf((String) answer);
+                }
+                if (answer instanceof Number) {
+                    final Number n = (Number) answer;
+                    return n.intValue() != 0 ? Boolean.TRUE : Boolean.FALSE;
+                }
+            }
+        }
+        return null;
+    }
+```
+La ligne 226 correspond au premier if, donc la règle a bien reconnue le noeud problématique contenant deux if imbriqués
