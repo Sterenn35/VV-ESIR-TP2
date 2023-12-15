@@ -16,6 +16,7 @@ import java.util.Set;
 // prints all public enum, classes or interfaces along with their public methods
 public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
 
+    public static String resultat = "";
     private File file;
     private Set<String> getters;
     private Set<String> attributes;
@@ -43,13 +44,7 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
     public void visitTypeDeclaration(TypeDeclaration<?> declaration, Void arg) {
         if(!declaration.isPublic()) return;
         className = declaration.getFullyQualifiedName().orElse("[Anonymous]");
-        for (BodyDeclaration<?> classes: declaration.getMembers()) {            if (classes instanceof ClassOrInterfaceDeclaration) {
-                PublicElementsPrinter p = new PublicElementsPrinter(file);
-                p.packageName = packageName;
-                classes.accept(p, null);
-                p.writeResult();
-            }
-        }
+        resultat+=className;
 
         for(MethodDeclaration method : declaration.getMethods()) {
             method.accept(this, arg);
@@ -59,11 +54,21 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
             if (member instanceof FieldDeclaration) // FieldDeclaration comprend la déclaration des champs de la classe (attributs)
                 member.accept(this, arg);
         }
+        for (BodyDeclaration<?> classes: declaration.getMembers()) {
+            if (classes instanceof ClassOrInterfaceDeclaration) {
+                PublicElementsPrinter p = new PublicElementsPrinter(file);
+                resultat = resultat + p.packageName;
+                classes.accept(p, null);
+            }
+        }
+
         // On va retourner uniquement les attributs privés qui n'ont pas de getters
         for(String attribute : attributes) {
             String method = "get"+attribute+"()";
+            resultat += "Attributs : \n";
             if (!getters.contains(method)) {
                attributesWithoutGetters.add(attribute);
+               resultat += attribute + "\n";
             }
         }
         this.writeResult();
@@ -103,18 +108,19 @@ public class PublicElementsPrinter extends VoidVisitorWithDefaults<Void> {
      */
     public void writeResult() {
         System.out.println("Writing...");
-        try {
+        /*try {
             FileWriter report = new FileWriter(file);
-            report.write("Package : " + packageName +"\n");
-            report.write("Classe : " + className);
+            *//*report.write("Package : " + packageName +"\n");
+            report.write("Classe : " + className +"\n");
             report.write("Attributs : ");
             for (String a: attributesWithoutGetters) {
 
                 report.write(a + ",");
-            }
+            }*//*
+            report.write(resultat);
             report.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 }

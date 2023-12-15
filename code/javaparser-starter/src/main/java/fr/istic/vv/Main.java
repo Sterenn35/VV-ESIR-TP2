@@ -9,9 +9,11 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 public class Main {
 
@@ -28,18 +30,26 @@ public class Main {
         }
 
 
-        File report = new File("report.txt");
-        if (report.createNewFile()) {
-            System.out.println("File created: " + report.getName());
+        File f = new File("report.txt");
+        if (f.createNewFile()) {
+            System.out.println("File created: " + f.getName());
         } else {
                 System.out.println("File already exists.");
         }
         SourceRoot root = new SourceRoot(file.toPath());
-        PublicElementsPrinter printer = new PublicElementsPrinter(report);
+        PublicElementsPrinter printer = new PublicElementsPrinter(f);
         root.parse("", (localPath, absolutePath, result) -> {
             result.ifSuccessful(unit -> unit.accept(printer, null));
             return SourceRoot.Callback.Result.DONT_SAVE;
         });
+        try {
+            FileWriter report = new FileWriter(f);
+            report.write(PublicElementsPrinter.resultat);
+            report.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 }

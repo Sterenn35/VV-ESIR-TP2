@@ -12,6 +12,5 @@ public class Person {
     public class Animal {
         private String surname;
         private int ageAnimal;
-    
     }
 }

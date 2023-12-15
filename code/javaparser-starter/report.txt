@@ -1,4 +1,7 @@
-Package : Optional[package people;
-
-]
-Classe : people.PersonAttributs : age,
+people.Personpeople.Person.AnimalAttributs : 
+surname
+Attributs : 
+ageAnimal
+Attributs : 
+Attributs : 
+age
