@@ -1,24 +1,7 @@
-Attributs privés de classes publiques sans getters + 
-Fichier : Main.java
+Attributs privés de classes publiques sans getters 
+ 
+Fichier : Main3.java
 
-people.Person
- - age
+pluh.A
 
-people.Person.Animal
- - surname
- - ageAnimal
-Fichier : Main2.java
-
-people.Person
- - age
-
-espace.Soucoupe
- - taille
- - age
-
-espace.Soucoupe.Alien
- - race
-
-espace.Soucoupe.Alien.Pistolet
- - laser
- - puissance
+pluh.A.B
