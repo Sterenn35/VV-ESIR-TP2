@@ -30,26 +30,27 @@ public class Main {
         }
 
 
-        File f = new File("report.txt");
-        if (f.createNewFile()) {
-            System.out.println("File created: " + f.getName());
+        File report = new File("report.txt");
+        if (report.createNewFile()) {
+            System.out.println("File created: " + report.getName());
         } else {
                 System.out.println("File already exists.");
         }
         SourceRoot root = new SourceRoot(file.toPath());
-        PublicElementsPrinter printer = new PublicElementsPrinter(f);
+        PublicElementsPrinter printer = new PublicElementsPrinter();
+        PublicElementsPrinter.resultatTotal += "Attributs privés de classes publiques sans getters \n \n";
+
         root.parse("", (localPath, absolutePath, result) -> {
-            result.ifSuccessful(unit -> unit.accept(printer, null));
+            PublicElementsPrinter.resultatTotal += "Fichier : " + localPath + "\n";
+            result.ifSuccessful(unit -> unit.accept(printer, null)); //on accepte le visiteur et on commence le traitement
             return SourceRoot.Callback.Result.DONT_SAVE;
         });
         try {
-            FileWriter report = new FileWriter(f);
-            report.write(PublicElementsPrinter.resultat);
-            report.close();
+            FileWriter writer = new FileWriter(report);
+            writer.write(PublicElementsPrinter.resultatTotal);
+            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }

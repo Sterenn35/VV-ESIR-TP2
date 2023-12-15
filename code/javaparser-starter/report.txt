@@ -1,7 +1,24 @@
-people.Personpeople.Person.AnimalAttributs : 
-surname
-Attributs : 
-ageAnimal
-Attributs : 
-Attributs : 
-age
+Attributs privés de classes publiques sans getters + 
+Fichier : Main.java
+
+people.Person
+ - age
+
+people.Person.Animal
+ - surname
+ - ageAnimal
+Fichier : Main2.java
+
+people.Person
+ - age
+
+espace.Soucoupe
+ - taille
+ - age
+
+espace.Soucoupe.Alien
+ - race
+
+espace.Soucoupe.Alien.Pistolet
+ - laser
+ - puissance
