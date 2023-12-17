@@ -1,7 +1,4 @@
 Attributs privés de classes publiques sans getters 
  
 Fichier : Main3.java
-
-pluh.A
-
-pluh.A.B
+public int max(int a, int b, int c) : 4public void coolMethod() : 5

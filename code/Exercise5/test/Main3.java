@@ -1,7 +1,7 @@
 package pluh;
 public class A {
 
-    public static int max(int a, int b, int c) {
+    public int max(int a, int b, int c) {
         if (a > b) {
             if(a > c) {
                 return a;
@@ -25,6 +25,9 @@ public class A {
         public void coolMethod(){
             for(int i = 0; i<12; i++){
                 int a = 1;
+		if(a>b){
+		   int a = 1;
+		}
             }
             for(int i:l){
                 int a = 1;
