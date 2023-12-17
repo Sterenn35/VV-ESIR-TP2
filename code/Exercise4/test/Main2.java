@@ -2,6 +2,7 @@ package espace;
 public class Soucoupe {
     private String name;
     private int taille;
+    public int poids;
     
     public String getName() { return name; }
 

@@ -1,5 +1,8 @@
-Attributs privés de classes publiques sans getters + 
+Attributs privés de classes publiques sans getters 
+
+========================================
 Fichier : Main.java
+========================================
 
 people.Person
  - age
@@ -7,14 +10,13 @@ people.Person
 people.Person.Animal
  - surname
  - ageAnimal
-Fichier : Main2.java
 
-people.Person
- - age
+========================================
+Fichier : Main2.java
+========================================
 
 espace.Soucoupe
  - taille
- - age
 
 espace.Soucoupe.Alien
  - race
