@@ -30,10 +30,10 @@ public class Main {
         }
         SourceRoot root = new SourceRoot(file.toPath());
         CyclomaticComplexityVisitor printer = new CyclomaticComplexityVisitor();
-        CyclomaticComplexityVisitor.resultatTotal += "Attributs privés de classes publiques sans getters \n \n";
+        CyclomaticComplexityVisitor.resultatTotal += "Complexité cyclomatique de chaque méthode \n \n";
 
         root.parse("", (localPath, absolutePath, result) -> {
-            CyclomaticComplexityVisitor.resultatTotal += "Fichier : " + localPath + "\n";
+            CyclomaticComplexityVisitor.resultatTotal += "\nFichier : " + localPath + "\n";
             result.ifSuccessful(unit -> unit.accept(printer, null)); //on accepte le visiteur et on commence le traitement
             return SourceRoot.Callback.Result.DONT_SAVE;
         });

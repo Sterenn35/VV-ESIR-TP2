@@ -2,15 +2,9 @@ package fr.istic.vv;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 
 // This class visits a compilation unit and
@@ -37,7 +31,9 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
 
     public void visitTypeDeclaration(TypeDeclaration<?> declaration, Void arg) {
         className = declaration.getFullyQualifiedName().orElse("[Anonymous]");
-        resultat += "\n" + className + "\n";
+        resultat += "\nClasse : " + className + "\n";
+
+        this.writeResult(); //on écrit notre résultat de la classe dans le doc global
 
         //Parcours des méthodes
         for(MethodDeclaration method : declaration.getMethods()) {
@@ -49,7 +45,6 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
         //parcours classes
         for (BodyDeclaration<?> classes: declaration.getMembers()) {
             if (classes instanceof ClassOrInterfaceDeclaration) { //Si on rentre dans une classe on recrée un Visiteur et on refait le même traitement sur la classe fille
-                //@TODO ptet mettre un reset des attributs
                 classes.accept(this, null);
             }
         }
@@ -70,12 +65,11 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
                    statement.accept(this, arg);
             }
         }
-        resultat = methodName + " : " + cpt;
+        resultat = methodName + " : " + cpt + "\n";
     }
 
     public void visit(IfStmt statement, Void arg) {
         cpt++;
-        System.out.println("if");
         if(statement.hasThenBlock()){
             for(Node node : statement.getThenStmt().getChildNodes()){
                 node.accept(this, arg);
@@ -89,7 +83,6 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
     }
     public void visit(ForStmt statement, Void arg) {
         cpt++;
-        System.out.println("for");
         if(!statement.hasEmptyBody()){
             for(Node node : statement.getBody().getChildNodes()){
                 node.accept(this, arg);
@@ -99,7 +92,6 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
 
     public void visit(ForEachStmt statement, Void arg) {
         cpt++;
-        System.out.println("foreach");
         if(!statement.hasEmptyBody()){
             for(Node node : statement.getBody().getChildNodes()){
                 node.accept(this, arg);
@@ -109,7 +101,6 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
 
     public void visit(WhileStmt statement, Void arg) {
         cpt++;
-        System.out.println("while");
         if(!statement.hasEmptyBody()){
             for(Node node : statement.getBody().getChildNodes()){
                 node.accept(this, arg);
@@ -123,7 +114,7 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
          * Récupère les résultats du parser (les attributs) et
          */
     public void writeResult() {
-        System.out.println("Writing...");
+        //System.out.println("Writing...");
         resultatTotal += resultat;
     }
 }

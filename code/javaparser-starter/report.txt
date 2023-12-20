@@ -1,4 +1,17 @@
-Attributs privés de classes publiques sans getters 
+Complexité cyclomatique de chaque méthode 
  
+
 Fichier : Main3.java
-public int max(int a, int b, int c) : 4public void coolMethod() : 5
+
+Classe : pluh.A
+public int max(int a, int b, int c) : 4
+public int max(int a, int b, int c) : 4
+
+Classe : pluh.A.B
+public void coolMethod() : 5
+
+Fichier : Main4.java
+public void coolMethod() : 5
+
+Classe : pouic.C
+public int truc() : 4
