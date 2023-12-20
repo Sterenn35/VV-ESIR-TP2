@@ -16,11 +16,14 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
     private String methodName;
     private int cpt;
 
+    private int index;
+
     public CyclomaticComplexityVisitor() {
         resultat = "";
         className = "";
         methodName = "";
         cpt = 1; //compteur de complexité cyclomatique (nb de comditions + 1)
+        index = 0;
     }
     @Override
     public void visit(CompilationUnit unit, Void arg) {
@@ -33,16 +36,14 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
         className = declaration.getFullyQualifiedName().orElse("[Anonymous]");
         resultat += "\nClasse : " + className + "\n";
 
-        this.writeResult(); //on écrit notre résultat de la classe dans le doc global
-
         //Parcours des méthodes
         for(MethodDeclaration method : declaration.getMethods()) {
             method.accept(this, arg);
         }
 
         this.writeResult(); //on écrit notre résultat de la classe dans le doc global
-
-        //parcours classes
+        resultat = "";
+        //parcours sous-classes
         for (BodyDeclaration<?> classes: declaration.getMembers()) {
             if (classes instanceof ClassOrInterfaceDeclaration) { //Si on rentre dans une classe on recrée un Visiteur et on refait le même traitement sur la classe fille
                 classes.accept(this, null);
@@ -65,7 +66,15 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
                    statement.accept(this, arg);
             }
         }
-        resultat = methodName + " : " + cpt + "\n";
+        resultat += "Method number "+ index + " : " + methodName + " : " + cpt + "\n";
+
+        //histogram printed in console
+        System.out.print(index + " : ");
+        for(int i = 0; i<cpt; i++){
+            System.out.print("*");
+        }
+        System.out.println();
+        index++;
     }
 
     public void visit(IfStmt statement, Void arg) {

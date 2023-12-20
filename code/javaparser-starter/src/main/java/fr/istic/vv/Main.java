@@ -33,7 +33,7 @@ public class Main {
         CyclomaticComplexityVisitor.resultatTotal += "Complexité cyclomatique de chaque méthode \n \n";
 
         root.parse("", (localPath, absolutePath, result) -> {
-            CyclomaticComplexityVisitor.resultatTotal += "\nFichier : " + localPath + "\n";
+            CyclomaticComplexityVisitor.resultatTotal += "\n========================================\nFichier : " + localPath + "\n========================================\n";
             result.ifSuccessful(unit -> unit.accept(printer, null)); //on accepte le visiteur et on commence le traitement
             return SourceRoot.Callback.Result.DONT_SAVE;
         });
