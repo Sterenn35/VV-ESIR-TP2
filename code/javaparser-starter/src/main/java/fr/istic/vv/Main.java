@@ -37,6 +37,7 @@ public class Main {
             result.ifSuccessful(unit -> unit.accept(printer, null)); //on accepte le visiteur et on commence le traitement
             return SourceRoot.Callback.Result.DONT_SAVE;
         });
+        printer.printHistogram();
         try {
             FileWriter writer = new FileWriter(report);
             writer.write(CyclomaticComplexityVisitor.resultatTotal);

@@ -15,15 +15,14 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
     private String className;
     private String methodName;
     private int cpt;
-
-    private int index;
+    private static int[] histogram;
 
     public CyclomaticComplexityVisitor() {
         resultat = "";
         className = "";
         methodName = "";
         cpt = 1; //compteur de complexité cyclomatique (nb de comditions + 1)
-        index = 0;
+        histogram = new int[100];//taille arbitraire
     }
     @Override
     public void visit(CompilationUnit unit, Void arg) {
@@ -66,15 +65,8 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
                    statement.accept(this, arg);
             }
         }
-        resultat += "Method number "+ index + " : " + methodName + " : " + cpt + "\n";
-
-        //histogram printed in console
-        System.out.print(index + " : ");
-        for(int i = 0; i<cpt; i++){
-            System.out.print("*");
-        }
-        System.out.println();
-        index++;
+        resultat += methodName + " : " + cpt + "\n";
+        histogram[cpt] += 1;
     }
 
     public void visit(IfStmt statement, Void arg) {
@@ -123,7 +115,23 @@ public class CyclomaticComplexityVisitor extends VoidVisitorWithDefaults<Void> {
          * Récupère les résultats du parser (les attributs) et
          */
     public void writeResult() {
-        //System.out.println("Writing...");
         resultatTotal += resultat;
+    }
+
+    public void printHistogram(){
+        System.out.println("Répartition des CC");
+        int id_sup = 0;
+        for(int i = 0; i <histogram.length; i++){
+            if(histogram[i]!=0){
+                id_sup = i;
+            }
+        }
+        for(int i = 0; i <=id_sup; i++){
+            System.out.print(i + " : ");
+            for(int j = 0; j<histogram[i]; j++){
+                System.out.print("*");
+            }
+            System.out.println();
+        }
     }
 }
