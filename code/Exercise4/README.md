@@ -1,3 +1,2 @@
-# Code of your exercise
+# No Getter
 
-Put here all the code created for this exercise
